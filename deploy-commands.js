@@ -16,7 +16,7 @@ const commands = [
         .setRequired(true)
     ),
 
- new SlashCommandBuilder()
+  new SlashCommandBuilder()
   .setName('win')
   .setDescription('Suma una win')
   .addStringOption(option =>
@@ -24,7 +24,7 @@ const commands = [
       .setName('nombre')
       .setDescription('Nombre del jugador')
       .setRequired(true)
-    ),
+  ),
 
   new SlashCommandBuilder()
   .setName('removewin')
