@@ -16,14 +16,14 @@ const commands = [
         .setRequired(true)
     ),
 
-  new SlashCommandBuilder()
-    .setName('win')
-    .setDescription('Suma una win')
-    .addUserOption(option =>
-      option
-        .setName('usuario')
-        .setDescription('Usuario')
-        .setRequired(true)
+ new SlashCommandBuilder()
+  .setName('win')
+  .setDescription('Suma una win')
+  .addStringOption(option =>
+    option
+      .setName('nombre')
+      .setDescription('Nombre del jugador')
+      .setRequired(true)
     ),
 
   new SlashCommandBuilder()
