@@ -56,67 +56,66 @@ client.on('interactionCreate', async interaction => {
     );
   }
 
-  if (interaction.commandName === 'win') {
-    if (!data.activa) {
-      return interaction.reply({
-        content: '❌ No hay una premiada activa.',
-        ephemeral: true
-      });
-    }
+ if (interaction.commandName === 'win') {
+  if (!data.activa) {
+    return interaction.reply({
+      content: '❌ No hay una premiada activa.',
+      ephemeral: true
+    });
+  }
 
-    const nombre = interaction.options.getString('nombre');
+  const nombre = interaction.options.getString('nombre');
 
-    if (!data.jugadores[usuario.id]) {
-      data.jugadores[usuario.id] = {
-        nombre: usuario.username,
-        wins: 0
-      };
-    }
+  if (!data.jugadores[nombre]) {
+    data.jugadores[nombre] = {
+      nombre: nombre,
+      wins: 0
+    };
+  }
 
-    data.jugadores[usuario.id].wins++;
+  data.jugadores[nombre].wins++;
 
-    const winsActuales = data.jugadores[usuario.id].wins;
+  const winsActuales = data.jugadores[nombre].wins;
 
-    if (
-      winsActuales >= data.winsNecesarias &&
-      !data.ganadores.includes(usuario.id)
-    ) {
-      data.ganadores.push(usuario.id);
-
-      guardar();
-
-      return interaction.reply(
-        `🏆 ${usuario.username} ganó la premiada con ${winsActuales} wins`
-      );
-    }
+  if (
+    winsActuales >= data.winsNecesarias &&
+    !data.ganadores.includes(nombre)
+  ) {
+    data.ganadores.push(nombre);
 
     guardar();
 
     return interaction.reply(
-      `✅ ${usuario.username} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
-    );
-
-}
- 
-if (interaction.commandName === 'removewin') {
-  const usuario = interaction.options.getUser('usuario');
-
-  if (!data.jugadores[usuario.id]) {
-    return interaction.reply(
-      `❌ ${usuario.username} no tiene wins registradas.`
+      `🏆 ${nombre} ganó la premiada con ${winsActuales} wins`
     );
   }
-
-  if (data.jugadores[usuario.id].wins > 0) {
-    data.jugadores[usuario.id].wins--;
-  }
-
-  const winsActuales = data.jugadores[usuario.id].wins;
 
   guardar();
 
   return interaction.reply(
-    `➖ ${usuario.username} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
+    `✅ ${nombre} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
+  );
+}
+ 
+if (interaction.commandName === 'removewin') {
+  const nombre = interaction.options.getString('nombre');
+
+  if (!data.jugadores[nombre]) {
+    return interaction.reply(
+      `❌ ${nombre} no tiene wins registradas.`
+    );
+  }
+
+  if (data.jugadores[nombre].wins > 0) {
+    data.jugadores[nombre].wins--;
+  }
+
+  const winsActuales = data.jugadores[nombre].wins;
+
+  guardar();
+
+  return interaction.reply(
+    `➖ ${nombre} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
   );
 }
   if (interaction.commandName === 'tabla') {
