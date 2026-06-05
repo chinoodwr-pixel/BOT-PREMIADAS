@@ -1,8 +1,6 @@
 const {
   Client,
-  GatewayIntentBits,
-  SlashCommandBuilder,
-  EmbedBuilder
+  GatewayIntentBits
 } = require('discord.js');
 
 const fs = require('fs');
@@ -37,12 +35,8 @@ client.once('ready', () => {
 client.on('interactionCreate', async interaction => {
   if (!interaction.isChatInputCommand()) return;
 
- if (interaction.commandName === 'start') {
-  console.log("COMANDO START EJECUTADO");
-
-  const wins = interaction.options.getInteger('wins');
-
-  console.log("Wins:", wins);
+  if (interaction.commandName === 'start') {
+    const wins = interaction.options.getInteger('wins');
 
     data.activa = true;
     data.winsNecesarias = wins;
@@ -56,68 +50,69 @@ client.on('interactionCreate', async interaction => {
     );
   }
 
- if (interaction.commandName === 'win') {
-  if (!data.activa) {
-    return interaction.reply({
-      content: '❌ No hay una premiada activa.',
-      ephemeral: true
-    });
-  }
+  if (interaction.commandName === 'win') {
+    if (!data.activa) {
+      return interaction.reply({
+        content: '❌ No hay una premiada activa.',
+        ephemeral: true
+      });
+    }
 
-  const nombre = interaction.options.getString('nombre');
+    const nombre = interaction.options.getString('nombre');
 
-  if (!data.jugadores[nombre]) {
-    data.jugadores[nombre] = {
-      nombre: nombre,
-      wins: 0
-    };
-  }
+    if (!data.jugadores[nombre]) {
+      data.jugadores[nombre] = {
+        nombre,
+        wins: 0
+      };
+    }
 
-  data.jugadores[nombre].wins++;
+    data.jugadores[nombre].wins++;
 
-  const winsActuales = data.jugadores[nombre].wins;
+    const winsActuales = data.jugadores[nombre].wins;
 
-  if (
-    winsActuales >= data.winsNecesarias &&
-    !data.ganadores.includes(nombre)
-  ) {
-    data.ganadores.push(nombre);
+    if (
+      winsActuales >= data.winsNecesarias &&
+      !data.ganadores.includes(nombre)
+    ) {
+      data.ganadores.push(nombre);
+
+      guardar();
+
+      return interaction.reply(
+        `🏆 ${nombre} ganó la premiada con ${winsActuales} wins`
+      );
+    }
 
     guardar();
 
     return interaction.reply(
-      `🏆 ${nombre} ganó la premiada con ${winsActuales} wins`
+      `✅ ${nombre} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
     );
   }
 
-  guardar();
+  if (interaction.commandName === 'removewin') {
+    const nombre = interaction.options.getString('nombre');
 
-  return interaction.reply(
-    `✅ ${nombre} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
-  );
-}
- 
-if (interaction.commandName === 'removewin') {
-  const nombre = interaction.options.getString('nombre');
+    if (!data.jugadores[nombre]) {
+      return interaction.reply(
+        `❌ ${nombre} no tiene wins registradas.`
+      );
+    }
 
-  if (!data.jugadores[nombre]) {
+    if (data.jugadores[nombre].wins > 0) {
+      data.jugadores[nombre].wins--;
+    }
+
+    const winsActuales = data.jugadores[nombre].wins;
+
+    guardar();
+
     return interaction.reply(
-      `❌ ${nombre} no tiene wins registradas.`
+      `➖ ${nombre} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
     );
   }
 
-  if (data.jugadores[nombre].wins > 0) {
-    data.jugadores[nombre].wins--;
-  }
-
-  const winsActuales = data.jugadores[nombre].wins;
-
-  guardar();
-
-  return interaction.reply(
-    `➖ ${nombre} ahora tiene ${winsActuales}/${data.winsNecesarias} wins`
-  );
-}
   if (interaction.commandName === 'tabla') {
     const jugadores = Object.values(data.jugadores);
 
@@ -127,7 +122,7 @@ if (interaction.commandName === 'removewin') {
 
     jugadores.sort((a, b) => b.wins - a.wins);
 
-    let texto = jugadores
+    const texto = jugadores
       .map((j, i) => `${i + 1}. ${j.nombre} - ${j.wins} wins`)
       .join('\n');
 
@@ -139,12 +134,8 @@ if (interaction.commandName === 'removewin') {
 
     guardar();
 
-    const nombres = data.ganadores.map(id => {
-      return data.jugadores[id]?.nombre || id;
-    });
-
     return interaction.reply(
-      `🏆 PREMIADA FINALIZADA\n\nGanadores:\n${nombres.join('\n') || 'Ninguno'}`
+      `🏆 PREMIADA FINALIZADA\n\nGanadores:\n${data.ganadores.join('\n') || 'Ninguno'}`
     );
   }
 
