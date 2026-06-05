@@ -64,7 +64,7 @@ client.on('interactionCreate', async interaction => {
       });
     }
 
-    const usuario = interaction.options.getUser('usuario');
+    const nombre = interaction.options.getString('nombre');
 
     if (!data.jugadores[usuario.id]) {
       data.jugadores[usuario.id] = {
