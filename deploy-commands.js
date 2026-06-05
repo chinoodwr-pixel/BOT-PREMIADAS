@@ -27,14 +27,14 @@ const commands = [
     ),
 
   new SlashCommandBuilder()
-    .setName('removewin')
-    .setDescription('Quita una win')
-    .addUserOption(option =>
-      option
-        .setName('usuario')
-        .setDescription('Usuario')
-        .setRequired(true)
-    ),
+  .setName('removewin')
+  .setDescription('Quita una win')
+  .addStringOption(option =>
+    option
+      .setName('nombre')
+      .setDescription('Nombre del jugador')
+      .setRequired(true)
+  ),
 
   new SlashCommandBuilder()
     .setName('tabla')
