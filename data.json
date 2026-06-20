@@ -1,0 +1,37 @@
+{
+  "activa": false,
+  "winsNecesarias": 2,
+  "jugadores": {
+    "hola1": {
+      "nombre": "hola1",
+      "wins": 0,
+      "pavos": 0,
+      "canjeado": false
+    },
+    "FFAA": {
+      "nombre": "FFAA",
+      "wins": 0,
+      "pavos": 0,
+      "canjeado": false
+    },
+    "sda": {
+      "nombre": "sda",
+      "wins": 0,
+      "pavos": 0,
+      "canjeado": false
+    },
+    "fran2": {
+      "nombre": "fran2",
+      "wins": 0.5,
+      "pavos": 0,
+      "canjeado": false
+    },
+    "d": {
+      "nombre": "d",
+      "wins": 0,
+      "pavos": 0,
+      "canjeado": false
+    }
+  },
+  "ganadores": []
+}
