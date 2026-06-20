@@ -1,0 +1,28 @@
+{
+  "activa": false,
+  "winsNecesarias": 2,
+  "jugadores": {
+    "fran1": {
+      "nombre": "fran1",
+      "wins": 2,
+      "pavos": 100,
+      "canjeado": false,
+      "premiadasGanadas": 1,
+      "winsHistoricas": 2
+    },
+    "dean": {
+      "nombre": "dean",
+      "wins": 2,
+      "pavos": 100,
+      "canjeado": false,
+      "premiadasGanadas": 1,
+      "winsHistoricas": 2
+    }
+  },
+  "ganadores": [
+    "fran1",
+    "dean"
+  ],
+  "premioPavos": 100,
+  "rankingMsgId": "1517988709553672333"
+}
