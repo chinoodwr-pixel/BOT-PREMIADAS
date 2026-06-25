@@ -10,7 +10,7 @@ const LISTA_GANADORES_ID = '1517978040003596359'; // ranking pavos (auto)
 const LOGS_ID            = '1517978289069883534'; // logs automáticos
 
 const MAX_PAVOS    = 2400;
-const DATA_FILE    = './data.json';
+const DATA_FILE    = '/data/data.json';
 const HORAS_LIMITE = 72;
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
