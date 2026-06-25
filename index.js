@@ -1,4 +1,5 @@
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 require('dotenv').config();
 
@@ -10,7 +11,7 @@ const LISTA_GANADORES_ID = '1517978040003596359'; // ranking pavos (auto)
 const LOGS_ID            = '1517978289069883534'; // logs automáticos
 
 const MAX_PAVOS    = 2400;
-const DATA_FILE    = '/data/data.json';
+const DATA_FILE    = '/data/data.json'; // 👈 CAMBIO: ahora usa el Volume persistente de Railway
 const HORAS_LIMITE = 72;
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -448,37 +449,41 @@ client.on('interactionCreate', async interaction => {
       return interaction.reply({ content: `❌ No existe el jugador **${nombre}**.`, ephemeral: true });
     }
 
-    if (!data.timers[nombre]) {
-      return interaction.reply({ content: `⚠️ **${nombre}** no tiene un timer activo. Puede que ya haya reclamado o el tiempo expiró.`, ephemeral: true });
-    }
+    const teniaTimer = !!data.timers[nombre];
 
-    // Marcar como reclamado y detener timer
+    // Marcar como reclamado y detener timer (si existía)
     data.jugadores[nombre].reclamado = true;
 
-    try {
-      const logsChannel = await client.channels.fetch(LOGS_ID);
-      const timerMsg = await logsChannel.messages.fetch(data.timers[nombre].logMsgId);
-      const embedRec = new EmbedBuilder()
-        .setTitle('✅ Premio reclamado a tiempo')
-        .setDescription(`**${nombre}** reclamó su premio de **${data.timers[nombre].pavos} pavos** ✅`)
-        .setColor(0x2ECC71)
-        .setTimestamp();
-      await timerMsg.edit({ embeds: [embedRec] });
-    } catch {}
+    if (teniaTimer) {
+      try {
+        const logsChannel = await client.channels.fetch(LOGS_ID);
+        const timerMsg = await logsChannel.messages.fetch(data.timers[nombre].logMsgId);
+        const embedRec = new EmbedBuilder()
+          .setTitle('✅ Premio reclamado a tiempo')
+          .setDescription(`**${nombre}** reclamó su premio de **${data.timers[nombre].pavos} pavos** ✅`)
+          .setColor(0x2ECC71)
+          .setTimestamp();
+        await timerMsg.edit({ embeds: [embedRec] });
+      } catch {}
 
-    delete data.timers[nombre];
+      delete data.timers[nombre];
+    }
+
     guardar();
     await actualizarRankingPavos();
 
     const embed = new EmbedBuilder()
       .setTitle('✅ Reclamo confirmado')
-      .setDescription(`**${nombre}** reclamó su premio a tiempo.\nLos pavos están **pendientes de entrega**.`)
+      .setDescription(
+        `**${nombre}** reclamó su premio.\nLos pavos están **pendientes de entrega**.` +
+        (teniaTimer ? '' : '\n\n⚠️ *No tenía un timer activo (ya había expirado o nunca se inició), pero se marcó como reclamado igual.*')
+      )
       .setColor(0x2ECC71)
       .setFooter({ text: `Confirmado por ${interaction.user.username}` })
       .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
-    await log(logEmbed('✅ Reclamo confirmado', `**Jugador:** ${nombre}\n**Staff:** ${interaction.user.username}`, 0x2ECC71));
+    await log(logEmbed('✅ Reclamo confirmado', `**Jugador:** ${nombre}\n**Staff:** ${interaction.user.username}` + (teniaTimer ? '' : '\n*(sin timer activo)*'), 0x2ECC71));
     return;
   }
 
