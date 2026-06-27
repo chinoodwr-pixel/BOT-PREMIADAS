@@ -578,6 +578,11 @@ client.on('interactionCreate', async interaction => {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // 👀 /pavos_info
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  if (commandName === 'ranking') {
+    await interaction.reply({ embeds: [buildPavosEmbed()] });
+    return;
+  }
+
   if (commandName === 'pavos_info') {
     const nombre = interaction.options.getString('nombre');
     const j = data.jugadores[nombre];

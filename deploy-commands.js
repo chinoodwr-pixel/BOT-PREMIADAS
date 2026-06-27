@@ -79,7 +79,11 @@ const commands = [
     .setDescription('Ver los pavos de un jugador')
     .addStringOption(o => o.setName('nombre').setDescription('Nombre del jugador').setRequired(true)),
 
-].map(cmd => cmd.toJSON());
+  new SlashCommandBuilder()
+    .setName('ranking')
+    .setDescription('Muestra el ranking actual de pavos de todos los jugadores'),
+
+].map(cmd =;
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
