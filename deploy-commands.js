@@ -83,7 +83,7 @@ const commands = [
     .setName('ranking')
     .setDescription('Muestra el ranking actual de pavos de todos los jugadores'),
 
-].map(cmd =;
+].map(cmd => cmd.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
