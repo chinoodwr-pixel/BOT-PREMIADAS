@@ -40,7 +40,7 @@ function guardar() {
   }
 }
 
-ffunction fechaHoy() {
+function fechaHoy() {
   const d = new Date();
   return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}`;
 }
