@@ -7,7 +7,8 @@ require('dotenv').config();
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const LOGS_ID = '1517978289069883534';
 const MAX_PAVOS = 2400;
-const DATA_FILE = '/data/data.json';
+   const DATA_FILE = './data.json';
+
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 📦 DATA
